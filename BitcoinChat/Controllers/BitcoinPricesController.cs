@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Application.Features.BitcoinPrices.Queries;
 using MediatR;
-using Application.Features.BitcoinPrices.Queries;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace BitcoinChat.Controllers
@@ -28,11 +25,11 @@ namespace BitcoinChat.Controllers
         {
             return await _mediator.Send(new GetBitcoinPricesRangeQuery { StartDate = startDate, EndDate = endDate });
         }
+
         //[HttpGet]
         //[Route("current")]
         //public IEnumerable<WeatherForecast> Get()
         //{
-
         //}
     }
 }

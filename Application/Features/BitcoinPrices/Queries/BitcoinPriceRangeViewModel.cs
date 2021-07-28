@@ -2,5 +2,6 @@
 {
     public class BitcoinPriceRangeViewModel
     {
+        public BitcoinDatePriceViewModel PricesPerDate { get; set; }
     }
 }
