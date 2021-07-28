@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BitcoinChat.Controllers
 {
@@ -10,20 +11,20 @@ namespace BitcoinChat.Controllers
     [Route("[controller]")]
     public class BitcoinPricesController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private IMediator _mediator;
+        protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
         private readonly ILogger<BitcoinPricesController> _logger;
 
         public BitcoinPricesController(ILogger<BitcoinPricesController> logger, IMediator mediator)
         {
             _logger = logger;
-            _mediator = mediator;
         }
 
         [HttpGet]
         [Route("range")]
         public async Task<BitcoinPriceRangeViewModel> GetRangeAsync(string startDate, string endDate)
         {
-            return await _mediator.Send(new GetBitcoinPricesRangeQuery { StartDate = startDate, EndDate = endDate });
+            return await Mediator.Send(new GetBitcoinPricesRangeQuery { StartDate = startDate, EndDate = endDate });
         }
 
         //[HttpGet]

@@ -1,3 +1,4 @@
+using Application.Common.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,7 +27,10 @@ namespace BitcoinChat
             {
                 configuration.RootPath = "ClientApp";
             });
-            services.AddMediatR(Assembly.GetExecutingAssembly());
+            // TODO: Optimize way we get assemly
+            var assemblies = new Assembly[2] { Assembly.GetAssembly(typeof(ICoindeskApi)), Assembly.GetExecutingAssembly() };
+
+            services.AddMediatR(assemblies);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

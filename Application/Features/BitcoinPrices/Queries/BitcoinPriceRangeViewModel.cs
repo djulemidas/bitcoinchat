@@ -1,7 +1,9 @@
-﻿namespace Application.Features.BitcoinPrices.Queries
+﻿using System.Collections.Generic;
+
+namespace Application.Features.BitcoinPrices.Queries
 {
     public class BitcoinPriceRangeViewModel
     {
-        public BitcoinDatePriceViewModel PricesPerDate { get; set; }
+        public List<BitcoinDatePriceViewModel> PricesPerDate { get; set; }
     }
 }

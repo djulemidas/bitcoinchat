@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using MediatR;
 using RestEase;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,10 +17,25 @@ namespace Application.Features.BitcoinPrices.Queries
     {
         public async Task<BitcoinPriceRangeViewModel> Handle(GetBitcoinPricesRangeQuery request, CancellationToken cancellationToken)
         {
+            var results = new BitcoinPriceRangeViewModel
+            {
+                PricesPerDate = new List<BitcoinDatePriceViewModel>()
+            };
             var api = RestClient.For<ICoindeskApi>("https://api.coindesk.com/v1/bpi");
             var result = await api.GetBitcoinPricesRange(request.StartDate, request.EndDate);
+            // TODO: Add Automapper
+            var dates = result.Bpi.Keys;
+            foreach (var date in dates)
+            {
+                BitcoinDatePriceViewModel priceForDate = new BitcoinDatePriceViewModel
+                {
+                    Date = date,
+                    Price = result.Bpi[date]
+                };
+                results.PricesPerDate.Add(priceForDate);
+            }
 
-            throw new System.NotImplementedException();
+            return results;
         }
     }
 }
