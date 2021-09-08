@@ -1,57 +1,52 @@
 <template>
-  <div class="hello">
-    <img src="../assets/logo.png" />
-    <p>
-      Current price:
-      {{currentPrice}}
-    </p>
-    <div class="small">
-      <bitcoin-chart :chart-data="datacollection"></bitcoin-chart>
-      <button @click="fillData()">Randomize</button>
-    </div>
-  </div>
+ <h3 id="tableLabel">Bitcoin prices</h3>
+
+  <p>This component demonstrates fetching data from the server.</p>
+
+  <p v-if="!pricesPerDate"><em>Loading...</em></p>
+
+  <table class='table table-striped' aria-labelledby="tableLabel" v-if="pricesPerDate">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="pricePerDate of pricesPerDate" v-bind:key="pricePerDate">
+        <td>{{ pricePerDate.date }}</td>
+        <td>{{ pricePerDate.price }}</td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <script>
-import BitcoinChart from './BitcoinChart.js'
 
+import axios from 'axios'
 export default {
-  components: {
-      BitcoinChart
-  },
-  name: 'Home',
-  data() {
-    return {
-        currentPrice: 0.0,
-        prices: [],
-        datacollection: null
-    }
-  },
-  mounted () {
-    this.fillData()
-  },
-  methods: {
-    fillData () {
-      this.datacollection = {
-        labels: [this.getRandomInt(), this.getRandomInt()],
-        datasets: [
-          {
-            label: 'Data One',
-            backgroundColor: '#f87979',
-            data: [this.getRandomInt(), this.getRandomInt()]
-          }, {
-            label: 'Data One',
-            backgroundColor: '#f87979',
-            data: [this.getRandomInt(), this.getRandomInt()]
-          }
-        ]
-      }
+    name: "FetchData",
+    data() {
+        return {
+            pricesPerDate: []
+        }
     },
-    getRandomInt () {
-      return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+    methods: {
+        getBitcoinPrices() {
+            axios.get('/api/bitcoinprices/range')
+                .then((response) => {
+                    this.pricesPerDate =  response.data.pricesPerDate;
+                })
+                .catch(function (error) {
+                    alert(error);
+                });
+        }
+    },
+    mounted() {
+        this.getBitcoinPrices();
     }
-  }
 }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

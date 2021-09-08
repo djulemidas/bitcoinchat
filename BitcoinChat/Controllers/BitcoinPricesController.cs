@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace BitcoinChat.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class BitcoinPricesController : ControllerBase
     {
         private IMediator _mediator;
